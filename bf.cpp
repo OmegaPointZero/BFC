@@ -20,8 +20,8 @@ using namespace std;
 class Interpreter {
     public:
         char memory[30000]; //change this if you want different tape size
-        char *dp; // data pointer register
-        const char *ip; //instruction pointer register
+        char *dp; // data pointer 
+        const char *ip; //instruction pointer
 
     Interpreter(const char bf[]){
         dp = memory;
@@ -99,10 +99,7 @@ int main(int argc, char *argv[]){
     tape = new char[length];
     t.read(tape,length);
     t.close();
-/* this confirms we can iterate through all data passed via tape[]
-    for(int i = 0; i < length; i++)
-        cout << tape[i];
-*/    
+
     Interpreter interpreter = Interpreter(tape);
     interpreter.interpret();
 
