@@ -4,24 +4,24 @@
     Then, when it's good in assembly, I can make a compiler, maybe. Or
     a pseudo-compiler and manually write out an asm file w/ python or 
     whatevs and compile it like in shellforge.
-    
-    Also I'm gonna add networking capabilities (will not be easy)
+
 */
 
 #include <iostream>
-#include <iomanip>
 #include <fstream>
-#include <cctype>
 
 char* tape;
+int count;
 
 using namespace std;
+
+
 
 class Interpreter {
     public:
         char memory[30000]; //change this if you want different tape size
-        char *dp; // data pointer 
-        const char *ip; //instruction pointer
+        char *dp; // data pointer register
+        const char *ip; //instruction pointer register
 
     Interpreter(const char bf[]){
         dp = memory;
@@ -29,19 +29,19 @@ class Interpreter {
     }
 
     void inc_dp(){
-        dp++;
+        ++dp;
     }
 
     void inc_tape(){
-        (*dp)++;
+        ++(*dp);
     }
 
     void dec_dp(){
-        dp--;
+        --dp;
     }
 
     void dec_tape(){
-        (*dp)--;
+        --(*dp);
     }
 
     void output_STD(){
@@ -52,8 +52,34 @@ class Interpreter {
         cin >> *dp;
     }
 
-    void start_loop(){
+
+    void start_brace(){
+        if(*dp==0){
+            count = 1;
+            while(count>0){
+                ip++;
+                if(*ip == '['){
+                    count++;
+                } else if (*ip == ']'){
+                    count--;
+                }
+            }
+        }
         
+    }
+
+    void end_brace(){
+        if(*dp != 0){
+            count = 1;
+            while(count>0){
+                ip--;
+                if(*ip == '['){
+                    count--;
+                } else if (*ip == ']'){
+                    count++;
+                }
+            }
+        }
     }
     
 
@@ -66,8 +92,8 @@ class Interpreter {
                 case '-': dec_tape(); break;
                 case '.': output_STD(); break;
                 case ',': input_STD(); break;
-                case '[': start_loop(); break;
-                case ']': end_loop(); break;
+                case '[': start_brace(); break;
+                case ']': end_brace(); break;
             }
             ip++;
         }
@@ -99,7 +125,10 @@ int main(int argc, char *argv[]){
     tape = new char[length];
     t.read(tape,length);
     t.close();
-
+/* this confirms we can iterate through all data passed via tape[]
+    for(int i = 0; i < length; i++)
+        cout << tape[i];
+*/    
     Interpreter interpreter = Interpreter(tape);
     interpreter.interpret();
 
