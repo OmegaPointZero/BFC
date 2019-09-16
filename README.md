@@ -34,6 +34,6 @@ $ will read the current cell of memory, and perform 1 of 2 options based on that
   * The next 6 cells will be the port number (in ASCII) and a null terminator.
   * The next 999 are for what you want to send.
   
-  * **1**.
-   * $ will read a response from a server into the next 999 cells.
+ * **1**.
+  * $ will read a response from a server into the next 999 cells.
   
