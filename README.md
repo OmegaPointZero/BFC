@@ -32,7 +32,37 @@ $ will read the current cell of memory, and perform 1 of 2 options based on that
 * **0**. 
   * $ will read the next 17 cells, and that will be the IP address to send to, dot-notated in ASCII. It is important this string is null terminated.
   * The next 6 cells will be the port number (in ASCII) and a null terminator.
-  * The next 128 are for what you want to send.
+  * The next 512 are for what you want to send.
   
  * **1**.
   * $ will create a socket and wait for connection, and read the input into 
+
+# Development Progress
+
+### Brainfuck Standard- working!
+
+So far, brainfuck appears to adequately handle standard BF input. It's successfully run the few programs I have.
+
+### BFNet Extension
+
+At this time, the $ extension doesn't work. I only just programmed it to send a payload to a waiting nc instance. 
+
+* **To-Do**
+
+    * Read IP, PORT and payload from tape
+    * Verify that user input standard works according to BFNet documentation
+    * Right now, bf's tape doesn't handle the response. Response routine must be updated so that:
+        * If a request is made, we must be at the end of the area of the tape where memory was allocated for the request's input. We are past the cells that contain the target's IP, port number, and 512 cell payload buffer. 
+        * The next 514 bytes (one for padding at the start to ensure null termination, 512 to handle input from a client, 1 null termination)
+    * Routine for providing a 1 when calling $:
+        * Set up a listener, print the data, and resume execution at the end of the listened to data on the tape
+
+
+
+
+
+
+
+
+
+

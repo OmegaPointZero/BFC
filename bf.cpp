@@ -6,23 +6,22 @@
     whatevs and compile it like in shellforge.
 
 */
-
 #include <iostream>
 #include <fstream>
+#include "network.h"
+
 
 char* tape;
 int count;
 
 using namespace std;
 
-
-
 class Interpreter {
     public:
         char memory[30000]; //change this if you want different tape size
-        char *dp; // data pointer register
-        const char *ip; //instruction pointer register
-
+        char *dp; // data pointer 
+        const char *ip; //instruction pointer 
+    
     Interpreter(const char bf[]){
         dp = memory;
         ip = bf;        
@@ -82,6 +81,13 @@ class Interpreter {
         }
     }
     
+    void network(){
+        /*
+            What to do:
+            
+        */
+        request();
+    }
 
     bool interpret(){
         while(*ip){
@@ -94,9 +100,11 @@ class Interpreter {
                 case ',': input_STD(); break;
                 case '[': start_brace(); break;
                 case ']': end_brace(); break;
+                case '$': network(); break;
             }
             ip++;
         }
+        cout << "\n";
         return true;
     }
 
@@ -125,10 +133,7 @@ int main(int argc, char *argv[]){
     tape = new char[length];
     t.read(tape,length);
     t.close();
-/* this confirms we can iterate through all data passed via tape[]
-    for(int i = 0; i < length; i++)
-        cout << tape[i];
-*/    
+
     Interpreter interpreter = Interpreter(tape);
     interpreter.interpret();
 
