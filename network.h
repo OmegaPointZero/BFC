@@ -1,7 +1,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-int request();
+int request(char dp[]);
 
 int recReq();
 

@@ -45,17 +45,26 @@ So far, brainfuck appears to adequately handle standard BF input. It's successfu
 
 ### BFNet Extension
 
-At this time, the $ extension doesn't work. I only just programmed it to send a payload to a waiting nc instance. 
+At this time, the $ extension is half functional. The format to send data via network is as follows:
 
-* **To-Do**
+**Target IP Address**
+* The first 17 cells from the data pointer hold the IP Address (IPv4) of our target. This allows a maximum of 16 characters (ie, `127.111.111.111`), null-terminated. This string should be null terminated and failure to do so can cause malfunctions. This string must be started at the start of the cells and padded with nulls to fill the end.
 
-    * Read IP, PORT and payload from tape
-    * Verify that user input standard works according to BFNet documentation
-    * Right now, bf's tape doesn't handle the response. Response routine must be updated so that:
-        * If a request is made, we must be at the end of the area of the tape where memory was allocated for the request's input. We are past the cells that contain the target's IP, port number, and 512 cell payload buffer. 
-        * The next 514 bytes (one for padding at the start to ensure null termination, 512 to handle input from a client, 1 null termination)
-    * Routine for providing a 1 when calling $:
-        * Set up a listener, print the data, and resume execution at the end of the listened to data on the tape
+**Port number**
+* The next 6 cells of data are the ASCII value of the port number. In this implementation of the interpreter, the ASCII gets converted to an int, and then uses that in the appropriate socket functions. 6 cells allows for up to 5 characters and a null terminator (ie, `65533` + 0x00).
+
+**Message**
+* The next 256 characters are the message sent to `address:port`. This should also be null-terminated.
+
+**To-Do:**
+
+* Read IP, PORT and payload from tape
+* Verify that user input standard works according to BFNet documentation
+* Right now, bf's tape doesn't handle the response. Response routine must be updated so that:
+    * If a request is made, we must be at the end of the area of the tape where memory was allocated for the request's input. We are past the cells that contain the target's IP, port number, and 512 cell payload buffer. 
+    * The next 514 bytes (one for padding at the start to ensure null termination, 512 to handle input from a client, 1 null termination)
+* Routine for providing a 1 when calling $:
+    * Set up a listener, print the data, and resume execution at the end of the listened to data on the tape
 
 
 

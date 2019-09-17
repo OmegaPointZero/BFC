@@ -10,14 +10,12 @@
 #include <unistd.h>
 #define MAX 80 
 #define SA struct sockaddr 
-#define HOST "192.168.0.30"
-#define PORT 8000
-#define HOST "192.168.0.30"
+
 
 using namespace std;
 
 void func(int sockfd) 
-{ 
+{   /*
     char buff[MAX]; 
     int n; 
     for (;;) { 
@@ -35,35 +33,54 @@ void func(int sockfd)
             break; 
         } 
     } 
+    */
 } 
 
-int request(){
+int request(char dp[]){
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
-    char message[40] = "Let's see if this works";
+    char msg[256];
+    char target[17];
+    char port[6];
+    int portnum;
+    int i,j,k;
+    for(i=0;i<17;i++){
+        target[i] = (*dp);
+        dp++;
+    }
+    for(j=0;j<6;j++){
+        port[j] = *dp;
+        dp++;
+    }
+    for(k=0;k<256;k++){
+        msg[k] = *dp;
+        dp++;
+    }
+    portnum = atoi(port);  
+    
     //socket create and verfication
     sockfd = socket(AF_INET, SOCK_STREAM,0);
     if(sockfd == -1){
         printf("socket creation failed\n");
         exit(0);
-    } 
+    } /*
     else
-        printf("Socket created successfully.\n");
+        printf("Socket created successfully.\n");*/
     bzero(&servaddr, sizeof(servaddr));
     
     // assign IP and port
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("192.168.0.30");
-    servaddr.sin_port = htons(PORT);
+    servaddr.sin_addr.s_addr = inet_addr(target);
+    servaddr.sin_port = htons(portnum);
 
     // connect the client socket to server socket
     if(connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0){
         printf("Connection to server failed\n");
         exit(0);
     }
-    else
-        printf("connected to the server.\n");
-        send(sockfd, message, sizeof(message), 0);
+    else/*
+        printf("connected to the server.\n");*/
+        send(sockfd, msg, sizeof(msg), 0);
 
     func(sockfd);
     close(sockfd);
