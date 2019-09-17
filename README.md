@@ -30,10 +30,9 @@ BFNet, a brainfuck extension for which this interpreter was built, is an extensi
 $ will read the current cell of memory, and perform 1 of 2 options based on that:
 
 * **0**. 
-  * $ will read the next 20 cells, and that will be the IP address to send to, dot-notated in ASCII. Unused bytes should be 0x00, and the last byte should be 0x00 
+  * $ will read the next 17 cells, and that will be the IP address to send to, dot-notated in ASCII. It is important this string is null terminated.
   * The next 6 cells will be the port number (in ASCII) and a null terminator.
-  * The next 999 are for what you want to send.
+  * The next 128 are for what you want to send.
   
  * **1**.
-  * $ will read a response from a server into the next 999 cells.
-  
+  * $ will create a socket and wait for connection, and read the input into 
